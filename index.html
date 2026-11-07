@@ -388,7 +388,10 @@
       100% { opacity: 0; transform: translateY(-50%) scale(0); }
     }
 
-    .language-switcher { flex: 1; }
+    .language-switcher {
+      min-width: 0;
+      flex: 1 1 0;
+    }
 
     button {
       position: relative;
@@ -409,7 +412,12 @@
       transition: color 160ms ease, background 160ms ease, box-shadow 160ms ease;
     }
 
-    .language-switcher button { flex: 1; }
+    .language-switcher button {
+      width: 25%;
+      flex: 0 0 25%;
+      overflow: hidden;
+      white-space: nowrap;
+    }
 
     .theme-switcher button {
       width: 28px;
