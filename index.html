@@ -1,0 +1,1027 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Tim Li — Product Designer, Filmmaker &amp; Founder.">
+  <title>Tim Li — Portfolio</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #68686c;
+      --muted: #aaa9ae;
+      --paper: rgba(255, 255, 255, 0.92);
+      --glass: rgba(244, 244, 248, 0.16);
+      --line: rgba(255, 255, 255, 0.36);
+      --hover: #55555a;
+      --control: rgba(248, 248, 250, 0.72);
+      --control-active: rgba(255, 255, 255, 0.96);
+      --control-line: rgba(120, 120, 128, 0.14);
+      --project-shift: clamp(-26px, -1.7vw, -16px);
+      --guide-line: rgba(80, 82, 90, 0.2);
+    }
+
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --ink: #efeff1;
+      --muted: #aaaab0;
+      --paper: rgba(28, 29, 33, 0.9);
+      --glass: rgba(28, 30, 36, 0.2);
+      --line: rgba(255, 255, 255, 0.14);
+      --hover: #ffffff;
+      --control: rgba(34, 35, 40, 0.78);
+      --control-active: rgba(67, 68, 75, 0.96);
+      --control-line: rgba(255, 255, 255, 0.1);
+      --guide-line: rgba(255, 255, 255, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-width: 320px; }
+
+    body {
+      display: grid;
+      place-items: center;
+      margin: 0;
+      min-height: 100svh;
+      padding: clamp(24px, 5vw, 72px);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 16% 82%, rgba(216, 211, 199, 0.9), transparent 28%),
+        radial-gradient(circle at 82% 36%, rgba(202, 206, 213, 0.7), transparent 35%),
+        linear-gradient(145deg, #6f7879 0%, #aaa9b0 42%, #d0ccd0 100%);
+      transition: color 220ms ease, background 220ms ease;
+    }
+
+    .guide-line {
+      position: fixed;
+      z-index: 0;
+      background: var(--guide-line);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+    }
+
+    .guide-line.vertical {
+      top: 0;
+      bottom: 0;
+      width: 1px;
+    }
+
+    .guide-line.horizontal {
+      right: 0;
+      left: 0;
+      height: 1px;
+    }
+
+    .guide-line.left { left: var(--guide-left, 50%); }
+    .guide-line.right { left: var(--guide-right, 50%); }
+    .guide-line.top { top: var(--guide-top, 50%); }
+    .guide-line.bottom { top: var(--guide-bottom, 50%); }
+
+    body.show-guides .guide-line { opacity: 1; }
+
+    body.show-guides.single-guides .guide-line.right,
+    body.show-guides.single-guides .guide-line.bottom { opacity: 0; }
+
+    :root[data-theme="dark"] body {
+      background:
+        radial-gradient(circle at 16% 82%, rgba(72, 69, 62, 0.9), transparent 28%),
+        radial-gradient(circle at 82% 36%, rgba(51, 57, 65, 0.78), transparent 35%),
+        linear-gradient(145deg, #17191b 0%, #292a30 46%, #3a373c 100%);
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: clamp(300px, 22vw, 390px) minmax(0, 1fr);
+      align-items: stretch;
+      gap: clamp(14px, 1.4vw, 24px);
+      width: min(90vw, 1380px);
+      height: min(76svh, 760px);
+      min-height: 520px;
+      transform: translateY(-23px);
+    }
+
+    .panel {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(65, 65, 70, 0.1);
+    }
+
+    .left-column {
+      position: relative;
+      min-width: 0;
+      width: 100%;
+      height: 100%;
+      transform: translateX(0);
+      transition: transform 1000ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .left-column.is-shifted {
+      transform: translateX(var(--project-shift));
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      height: 100%;
+      width: 100%;
+      padding: clamp(24px, 2.5vw, 42px);
+      overflow: hidden;
+      background: var(--paper);
+      transition: background 220ms ease;
+    }
+
+    .menu-view {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      opacity: 1;
+      transform: translateX(0);
+      transition: opacity 420ms ease, transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .project-detail {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      visibility: hidden;
+      flex-direction: column;
+      padding: inherit;
+      opacity: 0;
+      transform: translateX(18px);
+      pointer-events: none;
+      transition:
+        opacity 420ms ease,
+        transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0s linear 520ms;
+    }
+
+    .sidebar.showing-project .menu-view {
+      opacity: 0;
+      transform: translateX(-18px);
+      pointer-events: none;
+    }
+
+    .sidebar.showing-project .project-detail {
+      visibility: visible;
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+      transition-delay: 80ms, 80ms, 0s;
+    }
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      width: fit-content;
+      height: auto;
+      padding: 0;
+      border-radius: 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .back-button svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .back-button span {
+      max-width: 210px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .project-copy {
+      display: grid;
+      gap: 22px;
+      max-height: calc(100% - 56px);
+      min-height: 0;
+      margin-top: auto;
+      padding-bottom: 6px;
+      padding-right: 6px;
+      overflow-y: auto;
+      scrollbar-color: var(--muted) transparent;
+      scrollbar-width: thin;
+    }
+
+    .project-copy h2 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.92rem;
+    }
+
+    .project-copy p {
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.55;
+    }
+
+    .project-copy p:first-of-type { white-space: pre-line; }
+
+    h1,
+    h2,
+    p { margin: 0; }
+
+    h1 {
+      font-size: 1rem;
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }
+
+    .role {
+      margin-top: 6px;
+      min-height: 2.9em;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .work {
+      display: grid;
+      gap: 24px;
+      margin-top: auto;
+      padding: 30px 0;
+    }
+
+    .group {
+      display: grid;
+      gap: 7px;
+    }
+
+    h2 {
+      margin-bottom: 3px;
+      font-size: 0.82rem;
+      font-weight: 650;
+    }
+
+    a {
+      width: fit-content;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.25;
+      text-decoration: none;
+      transition: color 180ms ease, transform 180ms ease;
+    }
+
+    a:hover,
+    a:focus-visible {
+      color: var(--hover);
+      transform: translateX(3px);
+      outline: none;
+    }
+
+    .contact { margin-top: auto; }
+
+    .utility-bar {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .segmented {
+      --liquid-x: 3px;
+      --liquid-width: 28px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 34px;
+      padding: 3px;
+      border: 1px solid var(--control-line);
+      border-radius: 999px;
+      background: var(--control);
+      box-shadow: 0 5px 18px rgba(47, 47, 51, 0.07);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: background 220ms ease, border-color 220ms ease;
+    }
+
+    .liquid-indicator {
+      position: absolute;
+      top: 3px;
+      left: var(--liquid-x);
+      z-index: 0;
+      width: var(--liquid-width);
+      height: 26px;
+      border-radius: 999px;
+      background: var(--control-active);
+      box-shadow: 0 1px 5px rgba(35, 35, 40, 0.16);
+      pointer-events: none;
+      transition:
+        left 520ms cubic-bezier(0.22, 1, 0.36, 1),
+        width 520ms cubic-bezier(0.22, 1, 0.36, 1),
+        background 220ms ease;
+    }
+
+    .liquid-indicator::before,
+    .liquid-indicator::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: inherit;
+      opacity: 0;
+      transform: translateY(-50%) scale(0);
+    }
+
+    .liquid-indicator::before { left: -4px; }
+    .liquid-indicator::after { right: -4px; }
+
+    .liquid-indicator.no-transition { transition: none; }
+
+    .liquid-indicator.is-moving {
+      animation: liquid-body 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .liquid-indicator.is-moving[data-direction="right"] {
+      transform-origin: right center;
+    }
+
+    .liquid-indicator.is-moving[data-direction="left"] {
+      transform-origin: left center;
+    }
+
+    .liquid-indicator.is-moving[data-direction="right"]::before,
+    .liquid-indicator.is-moving[data-direction="left"]::after {
+      animation: liquid-trail 520ms ease-out;
+    }
+
+    .liquid-indicator.is-moving[data-direction="right"]::after,
+    .liquid-indicator.is-moving[data-direction="left"]::before {
+      animation: liquid-leading 520ms ease-out;
+    }
+
+    @keyframes liquid-body {
+      0% { transform: scale(1); border-radius: 999px; }
+      34% { transform: scaleX(1.32) scaleY(0.84); border-radius: 44% 56% 54% 46%; }
+      68% { transform: scaleX(0.9) scaleY(1.1); border-radius: 58% 42% 46% 54%; }
+      100% { transform: scale(1); border-radius: 999px; }
+    }
+
+    @keyframes liquid-trail {
+      0% { opacity: 0; transform: translateY(-50%) scale(0); }
+      30% { opacity: 1; transform: translateY(-50%) scale(1.1); }
+      72% { opacity: 0.65; transform: translateY(-50%) scale(0.55); }
+      100% { opacity: 0; transform: translateY(-50%) scale(0); }
+    }
+
+    @keyframes liquid-leading {
+      0% { opacity: 0; transform: translateY(-50%) scale(0); }
+      38% { opacity: 0.9; transform: translateY(-50%) scale(0.85); }
+      76% { opacity: 0.3; transform: translateY(-50%) scale(1.18); }
+      100% { opacity: 0; transform: translateY(-50%) scale(0); }
+    }
+
+    .language-switcher { flex: 1; }
+
+    button {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      min-width: 0;
+      height: 26px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      color: var(--muted);
+      font: inherit;
+      font-size: 0.68rem;
+      font-weight: 600;
+      background: transparent;
+      cursor: pointer;
+      transition: color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    }
+
+    .language-switcher button { flex: 1; }
+
+    .theme-switcher button {
+      width: 28px;
+      flex: 0 0 28px;
+    }
+
+    .audio-switcher button {
+      width: 28px;
+      flex: 0 0 28px;
+    }
+
+    .audio-switcher button[aria-pressed="true"] {
+      background: var(--control-active);
+      box-shadow: 0 1px 5px rgba(35, 35, 40, 0.16);
+    }
+
+    .audio-toggle svg[hidden] { display: none; }
+
+    button:hover,
+    button:focus-visible { color: var(--ink); }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    button:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+
+    button[aria-pressed="true"] {
+      color: var(--ink);
+      background: transparent;
+      box-shadow: none;
+    }
+
+    button svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+    }
+
+    .frosted {
+      min-width: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      transform: scale(1);
+      transform-origin: left center;
+      background: var(--glass);
+      backdrop-filter: blur(30px) saturate(115%);
+      -webkit-backdrop-filter: blur(30px) saturate(115%);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.34),
+        0 20px 60px rgba(70, 69, 76, 0.08);
+      transition:
+        transform 1000ms cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 1000ms ease;
+    }
+
+    .frosted.is-active {
+      z-index: 2;
+      transform: translateX(var(--project-shift)) scale(1.05);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.34),
+        0 28px 80px rgba(40, 40, 48, 0.18);
+    }
+
+    .preview-video,
+    .preview-image {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-video[hidden],
+    .preview-image[hidden] { display: none; }
+
+    .preview-image {
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 320ms ease, transform 520ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .preview-image.is-changing {
+      opacity: 0;
+      transform: scale(1.015);
+    }
+
+    .gallery-controls {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      height: 34px;
+      padding: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 999px;
+      color: #fff;
+      background: rgba(20, 20, 24, 0.42);
+      box-shadow: 0 5px 18px rgba(20, 20, 24, 0.16);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .gallery-controls[hidden] { display: none; }
+
+    .gallery-controls button {
+      width: 28px;
+      height: 28px;
+      color: rgba(255, 255, 255, 0.74);
+    }
+
+    .gallery-controls button:hover,
+    .gallery-controls button:focus-visible { color: #fff; }
+
+    .gallery-count {
+      min-width: 34px;
+      color: #fff;
+      font-size: 0.68rem;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+
+    .frosted::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(circle at 25% 80%, rgba(216, 207, 186, 0.22), transparent 34%),
+        radial-gradient(circle at 78% 28%, rgba(205, 210, 220, 0.18), transparent 38%),
+        rgba(238, 239, 244, 0.2);
+      backdrop-filter: blur(18px) saturate(85%);
+      -webkit-backdrop-filter: blur(18px) saturate(85%);
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 900ms ease;
+    }
+
+    .frosted.is-active::before { opacity: 0; }
+
+    .work a[aria-current="true"] { color: var(--ink); }
+
+    .corner-hit {
+      position: absolute;
+      z-index: 12;
+      width: 28px;
+      height: 28px;
+      pointer-events: auto;
+    }
+
+    .corner-hit[data-corner="tl"] { top: 0; left: 0; }
+    .corner-hit[data-corner="tr"] { top: 0; right: 0; }
+    .corner-hit[data-corner="bl"] { bottom: 0; left: 0; }
+    .corner-hit[data-corner="br"] { right: 0; bottom: 0; }
+
+    @media (max-width: 760px) {
+      body {
+        display: block;
+        padding: 14px;
+      }
+
+      .shell {
+        grid-template-columns: 1fr;
+        width: 100%;
+        height: auto;
+        min-height: auto;
+        transform: none;
+      }
+
+      .sidebar {
+        min-height: auto;
+        height: auto;
+      }
+
+      .left-column { height: auto; }
+
+      .left-column.is-shifted { transform: none; }
+
+      .utility-bar {
+        position: static;
+        margin-top: 10px;
+      }
+
+      .work {
+        margin-top: 56px;
+        padding-bottom: 56px;
+      }
+
+      .frosted {
+        min-height: 58svh;
+      }
+
+      .frosted.is-active { transform: scale(1.02); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      body,
+      .left-column,
+      .sidebar,
+      .menu-view,
+      .project-detail,
+      .segmented,
+      .liquid-indicator,
+      .frosted,
+      .frosted::before,
+      .preview-image,
+      a,
+      button { transition: none; }
+
+      .guide-line { transition: none; }
+
+      .liquid-indicator.is-moving { animation: none; }
+    }
+
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="left-column">
+      <aside class="panel sidebar">
+        <span class="corner-hit" data-corner="tl" aria-hidden="true"></span>
+        <span class="corner-hit" data-corner="tr" aria-hidden="true"></span>
+        <span class="corner-hit" data-corner="bl" aria-hidden="true"></span>
+        <span class="corner-hit" data-corner="br" aria-hidden="true"></span>
+        <div class="menu-view">
+          <header>
+            <h1>Tim Li</h1>
+            <p class="role" data-i18n="role">Product Designer, Filmmaker &amp; Founder</p>
+          </header>
+
+          <nav class="work" aria-label="Selected work">
+            <section class="group" data-category="Product design" aria-labelledby="product-heading">
+              <h2 id="product-heading" data-i18n="product">Product design:</h2>
+              <a href="#" data-video="assets/take-phone.mp4">Take Phone for course 599</a>
+              <a href="#" data-video="assets/newron.mp4">Newron</a>
+              <a href="#">Agental</a>
+              <a href="#" data-video="assets/fn-valve.mp4">FN Valve</a>
+            </section>
+
+            <section class="group" data-category="film" aria-labelledby="film-heading">
+              <h2 id="film-heading" data-i18n="film">Film:</h2>
+              <a href="#">Digital Body Copyright</a>
+              <a href="#" data-video="assets/future-forecast-ucca-web.mov">Future Forecast for UCCA</a>
+              <a href="#" data-video="assets/resonant-universe.mp4">Resonant Universe for West Bund Museum</a>
+              <a href="#">DAA</a>
+              <a href="#">World Projection</a>
+            </section>
+
+            <section class="group" data-category="business" aria-labelledby="business-heading">
+              <h2 id="business-heading" data-i18n="business">Business:</h2>
+              <a href="#">Balenciaga</a>
+              <a href="#">Burberry</a>
+              <a href="#">Ann Andelman</a>
+              <a href="#" data-gallery="assets/katalog-studios.jpg|assets/katalog-surreal.png">Katalog Studios</a>
+            </section>
+          </nav>
+
+          <a class="contact" href="mailto:litiranecante@gmail.com">litiranecante@gmail.com</a>
+        </div>
+
+        <article class="project-detail" aria-hidden="true">
+          <button class="back-button" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+            <span data-i18n="back">Back to all projects</span>
+          </button>
+
+          <div class="project-copy">
+            <h2 class="project-title">FN Valve</h2>
+            <p class="project-paragraph"></p>
+            <p class="project-paragraph"></p>
+            <p class="project-paragraph"></p>
+          </div>
+        </article>
+      </aside>
+
+      <div class="utility-bar">
+        <div class="segmented language-switcher" aria-label="Language">
+          <span class="liquid-indicator" aria-hidden="true"></span>
+          <button type="button" data-language="zh-Hans" aria-label="简体中文" aria-pressed="false">简中</button>
+          <button type="button" data-language="zh-Hant" aria-label="繁體中文" aria-pressed="false">繁中</button>
+          <button type="button" data-language="en" aria-label="English" aria-pressed="true">EN</button>
+          <button type="button" data-language="ja" aria-label="日本語" aria-pressed="false">日本語</button>
+        </div>
+
+        <div class="segmented theme-switcher" aria-label="Color mode">
+          <span class="liquid-indicator" aria-hidden="true"></span>
+          <button type="button" data-theme-choice="light" aria-label="Use light appearance" aria-pressed="true" title="Light">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"/></svg>
+          </button>
+          <button type="button" data-theme-choice="dark" aria-label="Use dark appearance" aria-pressed="false" title="Dark">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true"><path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"/></svg>
+          </button>
+        </div>
+
+        <div class="segmented audio-switcher" aria-label="Video audio">
+          <button class="audio-toggle" type="button" aria-label="Unmute video" aria-pressed="false" title="Unmute">
+            <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="m16 9 5 6m0-6-5 6"/></svg>
+            <svg class="icon-sound" viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true" hidden><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15 9.5a4 4 0 0 1 0 5M18 7a7 7 0 0 1 0 10"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section class="panel frosted" aria-label="Project preview">
+      <span class="corner-hit" data-corner="tl" aria-hidden="true"></span>
+      <span class="corner-hit" data-corner="tr" aria-hidden="true"></span>
+      <span class="corner-hit" data-corner="bl" aria-hidden="true"></span>
+      <span class="corner-hit" data-corner="br" aria-hidden="true"></span>
+      <video class="preview-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+        <source src="assets/landing-page.mp4" type="video/mp4">
+      </video>
+      <img class="preview-image" alt="" hidden>
+      <div class="gallery-controls" aria-label="Image gallery" hidden>
+        <button class="gallery-prev" type="button" aria-label="Previous image">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <span class="gallery-count" aria-live="polite">1 / 2</span>
+        <button class="gallery-next" type="button" aria-label="Next image">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <span class="guide-line vertical left" aria-hidden="true"></span>
+  <span class="guide-line vertical right" aria-hidden="true"></span>
+  <span class="guide-line horizontal top" aria-hidden="true"></span>
+  <span class="guide-line horizontal bottom" aria-hidden="true"></span>
+
+  <script>
+    const translations = {
+      en: { role: "Product Designer, Filmmaker & Founder", product: "Product design:", film: "Film:", business: "Business:", back: "Back to all projects" },
+      "zh-Hans": { role: "产品设计师、电影创作者与创始人", product: "产品设计：", film: "影像：", business: "商业：", back: "返回所有项目" },
+      "zh-Hant": { role: "產品設計師、電影創作者與創辦人", product: "產品設計：", film: "影像：", business: "商業：", back: "返回所有項目" },
+      ja: { role: "プロダクトデザイナー、映像作家、創業者", product: "プロダクトデザイン：", film: "映像：", business: "ビジネス：", back: "すべてのプロジェクトへ戻る" }
+    };
+
+    const getPreference = key => {
+      try { return localStorage.getItem(key); } catch { return null; }
+    };
+
+    const savePreference = (key, value) => {
+      try { localStorage.setItem(key, value); } catch {}
+    };
+
+    const placeIndicator = (group, button) => {
+      const indicator = group.querySelector(".liquid-indicator");
+      const previous = Number(indicator.dataset.position ?? button.offsetLeft);
+      const next = button.offsetLeft;
+      const hasPosition = indicator.dataset.position !== undefined;
+
+      if (!hasPosition) indicator.classList.add("no-transition");
+      indicator.style.setProperty("--liquid-x", `${next}px`);
+      indicator.style.setProperty("--liquid-width", `${button.offsetWidth}px`);
+      indicator.dataset.position = String(next);
+      void indicator.offsetWidth;
+      indicator.classList.remove("no-transition", "is-moving");
+
+      if (hasPosition && next !== previous) {
+        indicator.dataset.direction = next > previous ? "right" : "left";
+        void indicator.offsetWidth;
+        indicator.classList.add("is-moving");
+      }
+    };
+
+    const setLanguage = language => {
+      const selected = translations[language] ? language : "en";
+      document.documentElement.lang = selected;
+      document.querySelectorAll("[data-i18n]").forEach(element => {
+        element.textContent = translations[selected][element.dataset.i18n];
+      });
+      document.querySelectorAll("[data-language]").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.language === selected));
+      });
+      const active = document.querySelector(`[data-language="${selected}"]`);
+      placeIndicator(active.closest(".segmented"), active);
+      savePreference("portfolio-language", selected);
+    };
+
+    const setTheme = theme => {
+      const selected = ["light", "dark"].includes(theme) ? theme : "light";
+      document.documentElement.dataset.theme = selected;
+      document.querySelectorAll("[data-theme-choice]").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.themeChoice === selected));
+      });
+      const active = document.querySelector(`[data-theme-choice="${selected}"]`);
+      placeIndicator(active.closest(".segmented"), active);
+      savePreference("portfolio-theme", selected);
+    };
+
+    document.querySelectorAll("[data-language]").forEach(button => {
+      button.addEventListener("click", () => setLanguage(button.dataset.language));
+    });
+
+    document.querySelectorAll("[data-theme-choice]").forEach(button => {
+      button.addEventListener("click", () => setTheme(button.dataset.themeChoice));
+    });
+
+    const preview = document.querySelector(".frosted");
+    const previewVideo = document.querySelector(".preview-video");
+    const previewImage = document.querySelector(".preview-image");
+    const galleryControls = document.querySelector(".gallery-controls");
+    const galleryCount = document.querySelector(".gallery-count");
+    const galleryPrev = document.querySelector(".gallery-prev");
+    const galleryNext = document.querySelector(".gallery-next");
+    const audioToggle = document.querySelector(".audio-toggle");
+    const leftColumn = document.querySelector(".left-column");
+    const sidebar = document.querySelector(".sidebar");
+    const menuView = document.querySelector(".menu-view");
+    const projectDetail = document.querySelector(".project-detail");
+    const projectTitle = document.querySelector(".project-title");
+    const projectParagraphs = [...document.querySelectorAll(".project-paragraph")];
+    const backButton = document.querySelector(".back-button");
+    let lastProjectLink;
+    let activeGallery = [];
+    let galleryIndex = 0;
+
+    const projectDetails = {
+      "Take Phone for course 599": [
+        "Take Phone is an experimental mobile experience developed for USC’s Course 599. The demo moves from an intimate moment of phone use into fluid, synthetic imagery, exploring how a handheld screen can blur the boundary between physical attention and digital space."
+      ],
+      "FN Valve": [
+        "Friendly Neighborhood Valve is a heat-triggered valve for residential water lines, designed to protect infrastructure during wildfires.",
+        "When a house is beyond saving, the valve automatically cuts it off from the main line, which keeps water pressure up for firefighters and stops debris from flowing back into the system.",
+        "It was inspired by the water pressure problems in the Palisades fires."
+      ],
+      "Katalog Studios": [
+        "Katalog Studios is a creative supercollective spanning visual design, 3D imagery, moving image, spatial storytelling, and experimental technology.",
+        "Our work includes projects for Burberry, Balenciaga, POP MART, miHoYo, Riot Games, ZEISS, and BYD Auto across fashion, entertainment, technology, and mobility.",
+        "We combine photoreal CG, art direction, campaign imagery, digital environments, installations, virtual characters, and AI-driven content to build complete visual worlds for brands and products."
+      ],
+      "Future Forecast for UCCA": [
+        "Pasig River 2030 - 6 Plus\n2022\nDigital Video, color, sound\n8’30”\nCommissioned by UCCA Center for Contemporary Art",
+        "The video Pasig River 2030 - 6 Plus, set in the Philippines in 2030, is the story of a fictional local Internet service provider and blockchain company, presenting the future digital life of developing countries from their perspective. The Pasig River of the title is an important thread in the filmic narrative. This river, which flows through Metro Manila, was judged to be “ecologically dead” in 2000 due to pollution. However, within the film’s computer generated imagery, the river has been restored to life and is jointly administered by the local government and the blockchain company. Looming in the background, however, are numerous problems, including comprehensive monitoring and digital colonization.",
+        "Informed by in-depth study into current “Digital Earth” projects, network infrastructure construction, and blockchain development, considering filmic narrative through the lens of American sociologist and design theorist Benjamin Bratton’s 6-tier Stack model, investigating the many factors behind the rapid evolution of the cloud-networked society, including the environment and ecology, society and culture, and geopolitics. The “6 Plus” of the title not only echoes the 6-layer structure of the video, but also lightheartedly reminds people of the various generations of mobile phone models. Through a humorous and absurd visual language, the artist reveals contradictions between digital structures and material reality, backwardness and progress. He also forewarns of the changes and “upgrades” that society will face, reminding us of a potential crisis not far away."
+      ],
+      "Resonant Universe for West Bund Museum": [
+        "The work constructs an Earth-like extraterrestrial world inhabited primarily by jellyfish and other planktonic organisms.",
+        "It investigates the environmental conditions necessary for life to develop, while exploring the origins of artificial life.",
+        "By incorporating real-world data from the natural sciences into computational simulations, we generate multiple populations of virtual organisms, including jellyfish. Within this simulated ecosystem, the project explores the open-ended possibilities for the evolution of biological form."
+      ]
+    };
+
+    const syncAudioButton = () => {
+      const soundOn = !previewVideo.muted;
+      audioToggle.setAttribute("aria-pressed", String(soundOn));
+      audioToggle.setAttribute("aria-label", soundOn ? "Mute video" : "Unmute video");
+      audioToggle.title = soundOn ? "Mute" : "Unmute";
+      audioToggle.querySelector(".icon-muted").hidden = soundOn;
+      audioToggle.querySelector(".icon-sound").hidden = !soundOn;
+    };
+
+    audioToggle.addEventListener("click", () => {
+      previewVideo.muted = !previewVideo.muted;
+      previewVideo.play().catch(() => {});
+      syncAudioButton();
+    });
+
+    const showGalleryImage = (index, animate = true) => {
+      if (!activeGallery.length) return;
+      galleryIndex = (index + activeGallery.length) % activeGallery.length;
+
+      const updateImage = () => {
+        previewImage.src = activeGallery[galleryIndex];
+        previewImage.alt = `Katalog Studios gallery image ${galleryIndex + 1}`;
+        galleryCount.textContent = `${galleryIndex + 1} / ${activeGallery.length}`;
+        requestAnimationFrame(() => previewImage.classList.remove("is-changing"));
+      };
+
+      if (animate) {
+        previewImage.classList.add("is-changing");
+        setTimeout(updateImage, 180);
+      } else {
+        updateImage();
+      }
+    };
+
+    galleryPrev.addEventListener("click", () => showGalleryImage(galleryIndex - 1));
+    galleryNext.addEventListener("click", () => showGalleryImage(galleryIndex + 1));
+
+    document.querySelectorAll(".work a").forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        const gallerySources = link.dataset.gallery?.split("|").filter(Boolean) || [];
+        const imageSource = link.dataset.image || gallerySources[0];
+        const source = link.dataset.video || "assets/landing-page.mp4";
+        const title = link.textContent.trim();
+        const category = link.closest(".group").dataset.category;
+        const details = projectDetails[title] || [
+          `Selected work in ${category}.`,
+          "Full project details will be added here."
+        ];
+
+        document.querySelectorAll(".work a").forEach(item => item.removeAttribute("aria-current"));
+        link.setAttribute("aria-current", "true");
+        lastProjectLink = link;
+
+        projectTitle.textContent = title;
+        projectParagraphs.forEach((paragraph, index) => {
+          paragraph.textContent = details[index] || "";
+          paragraph.hidden = !details[index];
+        });
+        sidebar.classList.add("showing-project");
+        leftColumn.classList.add("is-shifted");
+        menuView.inert = true;
+        menuView.setAttribute("aria-hidden", "true");
+        projectDetail.setAttribute("aria-hidden", "false");
+
+        preview.classList.remove("is-active");
+        void preview.offsetWidth;
+        preview.classList.add("is-active");
+
+        if (imageSource) {
+          activeGallery = gallerySources.length ? gallerySources : [imageSource];
+          galleryIndex = 0;
+          previewVideo.pause();
+          previewVideo.hidden = true;
+          previewImage.hidden = false;
+          showGalleryImage(0, false);
+          galleryControls.hidden = activeGallery.length < 2;
+          audioToggle.disabled = true;
+        } else {
+          activeGallery = [];
+          galleryControls.hidden = true;
+          previewImage.hidden = true;
+          previewImage.removeAttribute("src");
+          previewImage.alt = "";
+          previewVideo.hidden = false;
+          audioToggle.disabled = false;
+          if (previewVideo.getAttribute("src") !== source) {
+            previewVideo.src = source;
+            previewVideo.load();
+          } else {
+            previewVideo.currentTime = 0;
+          }
+          previewVideo.play().catch(() => {});
+        }
+      });
+    });
+
+    backButton.addEventListener("click", () => {
+      sidebar.classList.remove("showing-project");
+      leftColumn.classList.remove("is-shifted");
+      menuView.inert = false;
+      menuView.removeAttribute("aria-hidden");
+      projectDetail.setAttribute("aria-hidden", "true");
+      preview.classList.remove("is-active");
+      document.querySelectorAll(".work a").forEach(item => item.removeAttribute("aria-current"));
+      previewImage.hidden = true;
+      previewImage.classList.remove("is-changing");
+      previewImage.removeAttribute("src");
+      previewImage.alt = "";
+      activeGallery = [];
+      galleryControls.hidden = true;
+      previewVideo.hidden = false;
+      audioToggle.disabled = false;
+      previewVideo.src = "assets/landing-page.mp4";
+      previewVideo.load();
+      previewVideo.play().catch(() => {});
+      lastProjectLink?.focus();
+    });
+
+    setLanguage(getPreference("portfolio-language") || "en");
+    setTheme(getPreference("portfolio-theme") || "light");
+    syncAudioButton();
+
+    window.addEventListener("resize", () => {
+      document.querySelectorAll('.language-switcher [aria-pressed="true"], .theme-switcher [aria-pressed="true"]').forEach(button => {
+        const group = button.closest(".segmented");
+        if (group) placeIndicator(group, button);
+      });
+    });
+
+    const showGuides = (rect, single = false) => {
+      document.body.style.setProperty("--guide-left", `${rect.left}px`);
+      document.body.style.setProperty("--guide-right", `${rect.right}px`);
+      document.body.style.setProperty("--guide-top", `${rect.top}px`);
+      document.body.style.setProperty("--guide-bottom", `${rect.bottom}px`);
+      document.body.classList.toggle("single-guides", single);
+      document.body.classList.add("show-guides");
+    };
+
+    const hideGuides = () => document.body.classList.remove("show-guides", "single-guides");
+
+    document.querySelectorAll(".corner-hit").forEach(corner => {
+      corner.addEventListener("pointerenter", () => {
+        const rect = corner.closest(".panel").getBoundingClientRect();
+        const position = corner.dataset.corner;
+        const x = position.endsWith("r") ? rect.right : rect.left;
+        const y = position.startsWith("b") ? rect.bottom : rect.top;
+        showGuides({ left: x, right: x, top: y, bottom: y }, true);
+      });
+
+      corner.addEventListener("pointerleave", hideGuides);
+    });
+
+    document.querySelectorAll(".utility-bar .segmented").forEach(controlGroup => {
+      controlGroup.addEventListener("pointerenter", () => {
+        showGuides(controlGroup.getBoundingClientRect());
+      });
+
+      controlGroup.addEventListener("pointerleave", hideGuides);
+    });
+  </script>
+</body>
+</html>
