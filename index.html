@@ -491,17 +491,22 @@
     }
 
     .preview-video,
-    .preview-image {
+    .preview-image,
+    .preview-embed {
       position: absolute;
       inset: 0;
       z-index: 0;
       width: 100%;
       height: 100%;
+      border: 0;
       object-fit: cover;
     }
 
     .preview-video[hidden],
-    .preview-image[hidden] { display: none; }
+    .preview-image[hidden],
+    .preview-embed[hidden] { display: none; }
+
+    .preview-embed { background: #000; }
 
     .preview-image {
       opacity: 1;
@@ -665,17 +670,16 @@
             <section class="group" data-category="Product design" aria-labelledby="product-heading">
               <h2 id="product-heading" data-i18n="product">Product design:</h2>
               <a href="#" data-video="assets/take-phone.mp4">Take Phone for course 599</a>
-              <a href="#" data-video="assets/newron.mp4">Newron</a>
-              <a href="#">Agental</a>
+              <a href="#" data-gallery="assets/suzhou-stage-01.webp|assets/suzhou-stage-02.webp|assets/suzhou-stage-03.webp|assets/suzhou-stage-04.webp|assets/suzhou-stage-05.webp|assets/suzhou-stage-06.webp|assets/suzhou-stage-07.webp|assets/suzhou-stage-08.gif">Stage design for Suzhou museum performance</a>
+              <a href="#" data-gallery="assets/arcade-01.jpg|assets/arcade-02.jpg|assets/arcade-03.jpg|assets/arcade-04.jpg|assets/arcade-05.jpg|assets/arcade-06.jpg|assets/arcade-07.jpg|assets/arcade-08.jpg|assets/arcade-09.jpg|assets/arcade-10.jpg|assets/arcade-11.jpg|assets/arcade-12.jpg|assets/arcade-13.jpg|assets/arcade-14.jpg|assets/arcade-15.jpg|assets/arcade-16.jpg|assets/arcade-17.jpg|assets/arcade-18.jpg|assets/arcade-19.jpg|assets/arcade-20.jpg|assets/arcade-21.jpg|assets/arcade-22.jpg|assets/arcade-23.jpg|assets/arcade-24.jpg|assets/arcade-25.jpg|assets/arcade-26.jpg|assets/arcade-27.jpg|assets/arcade-28.jpg|assets/arcade-29.jpg|assets/arcade-30.jpg|assets/arcade-31.jpg|assets/arcade-32.jpg|assets/arcade-33.jpg|assets/arcade-34.jpg|assets/arcade-35.jpg|assets/arcade-36.jpg|assets/arcade-37.jpg|assets/arcade-38.jpg">ARCADE Hotel Handle System</a>
               <a href="#" data-video="assets/fn-valve.mp4">FN Valve</a>
             </section>
 
             <section class="group" data-category="film" aria-labelledby="film-heading">
               <h2 id="film-heading" data-i18n="film">Film:</h2>
-              <a href="#">Digital Body Copyright</a>
+              <a href="#" data-youtube="https://www.youtube.com/embed/_fVUh_tF4N0?rel=0">Digital Body Copyright</a>
               <a href="#" data-video="assets/future-forecast-ucca-web.mov">Future Forecast for UCCA</a>
               <a href="#" data-video="assets/resonant-universe.mp4">Resonant Universe for West Bund Museum</a>
-              <a href="#">DAA</a>
               <a href="#">World Projection</a>
             </section>
 
@@ -683,7 +687,6 @@
               <h2 id="business-heading" data-i18n="business">Business:</h2>
               <a href="#">Balenciaga</a>
               <a href="#">Burberry</a>
-              <a href="#">Ann Andelman</a>
               <a href="#" data-gallery="assets/katalog-studios.jpg|assets/katalog-surreal.png">Katalog Studios</a>
             </section>
           </nav>
@@ -742,6 +745,7 @@
       <video class="preview-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
         <source src="assets/landing-page.mp4" type="video/mp4">
       </video>
+      <iframe class="preview-embed" title="Digital Body Copyright video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen hidden></iframe>
       <img class="preview-image" alt="" hidden>
       <div class="gallery-controls" aria-label="Image gallery" hidden>
         <button class="gallery-prev" type="button" aria-label="Previous image">
@@ -831,6 +835,7 @@
 
     const preview = document.querySelector(".frosted");
     const previewVideo = document.querySelector(".preview-video");
+    const previewEmbed = document.querySelector(".preview-embed");
     const previewImage = document.querySelector(".preview-image");
     const galleryControls = document.querySelector(".gallery-controls");
     const galleryCount = document.querySelector(".gallery-count");
@@ -846,6 +851,7 @@
     const backButton = document.querySelector(".back-button");
     let lastProjectLink;
     let activeGallery = [];
+    let activeGalleryTitle = "Project";
     let galleryIndex = 0;
 
     const projectDetails = {
@@ -856,6 +862,14 @@
         "Friendly Neighborhood Valve is a heat-triggered valve for residential water lines, designed to protect infrastructure during wildfires.",
         "When a house is beyond saving, the valve automatically cuts it off from the main line, which keeps water pressure up for firefighters and stops debris from flowing back into the system.",
         "It was inspired by the water pressure problems in the Palisades fires."
+      ],
+      "Stage design for Suzhou museum performance": [
+        "Stage design for a performance at Suzhou Museum.",
+        "The project documents concept development, fabrication, spatial installation, and the live performance."
+      ],
+      "ARCADE Hotel Handle System": [
+        "A coordinated smart handle system for budget hotels, developed for Project Work 5 at Politecnico di Milano.",
+        "The project combines intuitive ergonomics, NFC access, safety cues, durable materials, and a companion service app across hotel entrances, guest rooms, bathrooms, dining, and laundry spaces."
       ],
       "Katalog Studios": [
         "Katalog Studios is a creative supercollective spanning visual design, 3D imagery, moving image, spatial storytelling, and experimental technology.",
@@ -895,7 +909,7 @@
 
       const updateImage = () => {
         previewImage.src = activeGallery[galleryIndex];
-        previewImage.alt = `Katalog Studios gallery image ${galleryIndex + 1}`;
+        previewImage.alt = `${activeGalleryTitle} gallery image ${galleryIndex + 1}`;
         galleryCount.textContent = `${galleryIndex + 1} / ${activeGallery.length}`;
         requestAnimationFrame(() => previewImage.classList.remove("is-changing"));
       };
@@ -916,6 +930,7 @@
         event.preventDefault();
         const gallerySources = link.dataset.gallery?.split("|").filter(Boolean) || [];
         const imageSource = link.dataset.image || gallerySources[0];
+        const embedSource = link.dataset.youtube;
         const source = link.dataset.video || "assets/landing-page.mp4";
         const title = link.textContent.trim();
         const category = link.closest(".group").dataset.category;
@@ -943,8 +958,22 @@
         void preview.offsetWidth;
         preview.classList.add("is-active");
 
-        if (imageSource) {
+        if (embedSource) {
+          activeGallery = [];
+          galleryControls.hidden = true;
+          previewVideo.pause();
+          previewVideo.hidden = true;
+          previewImage.hidden = true;
+          previewImage.removeAttribute("src");
+          previewImage.alt = "";
+          previewEmbed.src = embedSource;
+          previewEmbed.hidden = false;
+          audioToggle.disabled = true;
+        } else if (imageSource) {
+          previewEmbed.hidden = true;
+          previewEmbed.removeAttribute("src");
           activeGallery = gallerySources.length ? gallerySources : [imageSource];
+          activeGalleryTitle = title;
           galleryIndex = 0;
           previewVideo.pause();
           previewVideo.hidden = true;
@@ -953,6 +982,8 @@
           galleryControls.hidden = activeGallery.length < 2;
           audioToggle.disabled = true;
         } else {
+          previewEmbed.hidden = true;
+          previewEmbed.removeAttribute("src");
           activeGallery = [];
           galleryControls.hidden = true;
           previewImage.hidden = true;
@@ -984,7 +1015,10 @@
       previewImage.removeAttribute("src");
       previewImage.alt = "";
       activeGallery = [];
+      activeGalleryTitle = "Project";
       galleryControls.hidden = true;
+      previewEmbed.hidden = true;
+      previewEmbed.removeAttribute("src");
       previewVideo.hidden = false;
       audioToggle.disabled = false;
       previewVideo.src = "assets/landing-page.mp4";
