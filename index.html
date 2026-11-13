@@ -512,6 +512,11 @@
     .preview-image[hidden],
     .preview-embed[hidden] { display: none; }
 
+    .preview-video.fit-contain {
+      object-fit: contain;
+      background: #000;
+    }
+
     .preview-embed { background: #000; }
 
     .preview-image {
@@ -688,7 +693,7 @@
               <a href="#" data-video="assets/future-forecast-ucca-web.mov">Future Forecast for UCCA</a>
               <a href="#" data-video="assets/resonant-universe.mp4">Resonant Universe for West Bund Museum</a>
               <a href="#" data-video="assets/world-projection.mp4">World Projection</a>
-              <a href="#" data-video="assets/balenciaga-candy-crush.mov">Balenciaga</a>
+              <a href="#" data-video="assets/balenciaga-candy-crush.mov" data-video-fit="contain">Balenciaga</a>
               <a href="#" data-video="assets/burberry-year-of-the-tiger.mov">Burberry</a>
             </section>
 
@@ -944,6 +949,7 @@
         const imageSource = link.dataset.image || gallerySources[0];
         const embedSource = link.dataset.youtube;
         const source = link.dataset.video || "assets/landing-page.mp4";
+        previewVideo.classList.toggle("fit-contain", link.dataset.videoFit === "contain");
         const title = link.textContent.trim();
         const category = link.closest(".group").dataset.category;
         const details = projectDetails[title] || [
@@ -1032,6 +1038,7 @@
       previewEmbed.hidden = true;
       previewEmbed.removeAttribute("src");
       previewVideo.hidden = false;
+      previewVideo.classList.remove("fit-contain");
       audioToggle.disabled = false;
       previewVideo.src = "assets/landing-page.mp4";
       previewVideo.load();
