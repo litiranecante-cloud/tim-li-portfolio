@@ -266,6 +266,12 @@
       font-weight: 650;
     }
 
+    .group-title-link {
+      color: var(--ink);
+      font: inherit;
+      line-height: inherit;
+    }
+
     a {
       width: fit-content;
       color: var(--muted);
@@ -682,13 +688,12 @@
               <a href="#" data-video="assets/future-forecast-ucca-web.mov">Future Forecast for UCCA</a>
               <a href="#" data-video="assets/resonant-universe.mp4">Resonant Universe for West Bund Museum</a>
               <a href="#">World Projection</a>
-            </section>
-
-            <section class="group" data-category="business" aria-labelledby="business-heading">
-              <h2 id="business-heading" data-i18n="business">Business:</h2>
               <a href="#">Balenciaga</a>
               <a href="#">Burberry</a>
-              <a href="#" data-gallery="assets/katalog-studios.jpg|assets/katalog-surreal.png">Katalog Studios</a>
+            </section>
+
+            <section class="group" data-category="Katalog Studios" aria-labelledby="katalog-heading">
+              <h2 id="katalog-heading"><a class="group-title-link" href="#" data-gallery="assets/katalog-studios.jpg|assets/katalog-surreal.png">Katalog Studios</a>:</h2>
             </section>
           </nav>
 
@@ -767,10 +772,10 @@
 
   <script>
     const translations = {
-      en: { role: "Product Designer, Filmmaker & Founder", product: "Product & Spatial Design:", film: "Film:", business: "Business:", back: "Back to all projects" },
-      "zh-Hans": { role: "产品设计师、电影创作者与创始人", product: "产品与空间设计：", film: "影像：", business: "商业：", back: "返回所有项目" },
-      "zh-Hant": { role: "產品設計師、電影創作者與創辦人", product: "產品與空間設計：", film: "影像：", business: "商業：", back: "返回所有項目" },
-      ja: { role: "プロダクトデザイナー、映像作家、創業者", product: "プロダクト＆空間デザイン：", film: "映像：", business: "ビジネス：", back: "すべてのプロジェクトへ戻る" }
+      en: { role: "Product Designer, Filmmaker & Founder", product: "Product & Spatial Design:", film: "Film:", back: "Back to all projects" },
+      "zh-Hans": { role: "产品设计师、电影创作者与创始人", product: "产品与空间设计：", film: "影像：", back: "返回所有项目" },
+      "zh-Hant": { role: "產品設計師、電影創作者與創辦人", product: "產品與空間設計：", film: "影像：", back: "返回所有項目" },
+      ja: { role: "プロダクトデザイナー、映像作家、創業者", product: "プロダクト＆空間デザイン：", film: "映像：", back: "すべてのプロジェクトへ戻る" }
     };
 
     const getPreference = key => {
