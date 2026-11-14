@@ -1,8 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google" content="notranslate">
   <meta name="description" content="Tim Li — Product Designer, Filmmaker &amp; Founder.">
   <title>Tim Li — Portfolio</title>
   <style>
@@ -444,6 +445,13 @@
       height: 100%;
       border: 0;
       object-fit: cover;
+      filter: blur(0) saturate(1);
+      opacity: 1;
+      transform: scale(1);
+      transition:
+        filter 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 520ms ease,
+        transform 760ms cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .preview-video[hidden],
@@ -460,7 +468,10 @@
     .preview-image {
       opacity: 1;
       transform: scale(1);
-      transition: opacity 320ms ease, transform 520ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition:
+        filter 620ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 320ms ease,
+        transform 520ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .preview-image.is-changing {
@@ -516,10 +527,37 @@
       -webkit-backdrop-filter: none;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 900ms ease;
+      transition:
+        opacity 420ms ease,
+        backdrop-filter 520ms ease,
+        -webkit-backdrop-filter 520ms ease;
     }
 
     .frosted.is-active::before { opacity: 0; }
+
+    .frosted.is-blurring::before,
+    .frosted.is-project-enter::before {
+      background: rgba(232, 234, 240, 0.08);
+      backdrop-filter: blur(18px) saturate(80%);
+      -webkit-backdrop-filter: blur(18px) saturate(80%);
+      opacity: 1;
+    }
+
+    .frosted.is-blurring .preview-video:not([hidden]),
+    .frosted.is-blurring .preview-image:not([hidden]),
+    .frosted.is-blurring .preview-embed:not([hidden]) {
+      filter: blur(12px) saturate(0.82);
+      opacity: 0.62;
+      transform: scale(1.035);
+    }
+
+    .frosted.is-project-enter .preview-video:not([hidden]),
+    .frosted.is-project-enter .preview-image:not([hidden]),
+    .frosted.is-project-enter .preview-embed:not([hidden]) {
+      filter: blur(22px) saturate(0.72);
+      opacity: 0;
+      transform: scale(1.055);
+    }
 
     .work a[aria-current="true"] { color: var(--ink); }
 
@@ -587,7 +625,9 @@
       .liquid-indicator,
       .frosted,
       .frosted::before,
+      .preview-video,
       .preview-image,
+      .preview-embed,
       a,
       button { transition: none; }
 
@@ -607,32 +647,30 @@
         <span class="corner-hit" data-corner="br" aria-hidden="true"></span>
         <div class="menu-view">
           <header>
-            <h1>Tim Li</h1>
+            <h1 data-i18n="name">Tim Li</h1>
             <p class="role" data-i18n="role">Product Designer, Filmmaker &amp; Founder</p>
           </header>
 
-          <nav class="work" aria-label="Selected work">
+          <nav class="work" aria-label="Selected work" data-i18n-aria="selectedWork">
             <section class="group" data-category="Product &amp; Spatial Design" aria-labelledby="product-heading">
               <h2 id="product-heading" data-i18n="product">Product &amp; Spatial Design:</h2>
-              <a href="#" data-video="assets/take-phone.mp4">Take Phone for course 599</a>
-              <a href="#" data-gallery="assets/hua-chenyu-mars-01.png|assets/hua-chenyu-mars-02.png|assets/hua-chenyu-mars-03.png|assets/hua-chenyu-mars-04.png|assets/hua-chenyu-mars-05.png|assets/hua-chenyu-mars-06.png">Hua Chenyu Mars Concert</a>
-              <a href="#" data-gallery="assets/suzhou-stage-01.webp|assets/suzhou-stage-02.webp|assets/suzhou-stage-03.webp|assets/suzhou-stage-04.webp|assets/suzhou-stage-05.webp|assets/suzhou-stage-06.webp|assets/suzhou-stage-07.webp|assets/suzhou-stage-08.gif">Suzhou life for Suzhou museum</a>
-              <a href="#" data-gallery="assets/arcade-01.jpg|assets/arcade-02.jpg|assets/arcade-03.jpg|assets/arcade-04.jpg|assets/arcade-05.jpg|assets/arcade-06.jpg|assets/arcade-07.jpg|assets/arcade-08.jpg|assets/arcade-09.jpg|assets/arcade-10.jpg|assets/arcade-11.jpg|assets/arcade-12.jpg|assets/arcade-13.jpg|assets/arcade-14.jpg|assets/arcade-15.jpg|assets/arcade-16.jpg|assets/arcade-17.jpg|assets/arcade-18.jpg|assets/arcade-19.jpg|assets/arcade-20.jpg|assets/arcade-21.jpg|assets/arcade-22.jpg|assets/arcade-23.jpg|assets/arcade-24.jpg|assets/arcade-25.jpg|assets/arcade-26.jpg|assets/arcade-27.jpg|assets/arcade-28.jpg|assets/arcade-29.jpg|assets/arcade-30.jpg|assets/arcade-31.jpg|assets/arcade-32.jpg|assets/arcade-33.jpg|assets/arcade-34.jpg|assets/arcade-35.jpg|assets/arcade-36.jpg|assets/arcade-37.jpg|assets/arcade-38.jpg">ARCADE Hotel Handle System</a>
-              <a href="#" data-video="assets/fn-valve.mp4">FN Valve</a>
+              <a href="#" data-project="huaChenyu" data-gallery="assets/hua-chenyu-mars-01.png|assets/hua-chenyu-mars-02.png|assets/hua-chenyu-mars-03.png|assets/hua-chenyu-mars-04.png|assets/hua-chenyu-mars-05.png|assets/hua-chenyu-mars-06.png">Hua Chenyu Mars Concert</a>
+              <a href="#" data-project="suzhou" data-gallery="assets/suzhou-stage-01.webp|assets/suzhou-stage-02.webp|assets/suzhou-stage-03.webp|assets/suzhou-stage-04.webp|assets/suzhou-stage-05.webp|assets/suzhou-stage-06.webp|assets/suzhou-stage-07.webp|assets/suzhou-stage-08.gif">Suzhou life for Suzhou museum</a>
+              <a href="#" data-project="fnValve" data-video="assets/fn-valve.mp4">FN Valve</a>
             </section>
 
             <section class="group" data-category="film" aria-labelledby="film-heading">
               <h2 id="film-heading" data-i18n="film">Film:</h2>
-              <a href="#" data-youtube="https://www.youtube.com/embed/_fVUh_tF4N0?rel=0">Digital Body Copyright</a>
-              <a href="#" data-video="assets/future-forecast-ucca-web.mov">Future Forecast for UCCA</a>
-              <a href="#" data-video="assets/resonant-universe.mp4">Resonant Universe for West Bund Museum</a>
-              <a href="#" data-video="assets/world-projection.mp4">World Projection</a>
-              <a href="#" data-video="assets/balenciaga-candy-crush.mov" data-video-fit="contain">Balenciaga</a>
-              <a href="#" data-video="assets/burberry-year-of-the-tiger.mov">Burberry</a>
+              <a href="#" data-project="digitalBody" data-youtube="https://www.youtube.com/embed/_fVUh_tF4N0?rel=0">Digital Body Copyright</a>
+              <a href="#" data-project="futureForecast" data-video="assets/future-forecast-ucca-web.mov">Future Forecast for UCCA</a>
+              <a href="#" data-project="resonantUniverse" data-video="assets/resonant-universe.mp4">Resonant Universe for West Bund Museum</a>
+              <a href="#" data-project="worldProjection" data-video="assets/world-projection.mp4">World Projection</a>
+              <a href="#" data-project="balenciaga" data-video="assets/balenciaga-candy-crush.mov" data-video-fit="contain">Balenciaga</a>
+              <a href="#" data-project="burberry" data-video="assets/burberry-year-of-the-tiger.mov">Burberry</a>
             </section>
 
             <section class="group" data-category="Katalog Studios" aria-labelledby="katalog-heading">
-              <h2 id="katalog-heading"><a class="group-title-link" href="#" data-gallery="assets/katalog-studios.jpg|assets/katalog-surreal.png">Katalog Studios</a></h2>
+              <h2 id="katalog-heading"><a class="group-title-link" href="#" data-project="katalog" data-gallery="assets/katalog-studios.jpg|assets/katalog-surreal.png">Katalog Studios</a></h2>
             </section>
           </nav>
 
@@ -675,8 +713,8 @@
 
         <div class="segmented audio-switcher" aria-label="Video audio">
           <button class="audio-toggle" type="button" aria-label="Unmute video" aria-pressed="false" title="Unmute">
-            <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="m16 9 5 6m0-6-5 6"/></svg>
-            <svg class="icon-sound" viewBox="0 0 24 24" fill="none" stroke-width="1.8" aria-hidden="true" hidden><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15 9.5a4 4 0 0 1 0 5M18 7a7 7 0 0 1 0 10"/></svg>
+            <svg class="icon-muted" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M16 9 21 14M21 9l-5 5"/></svg>
+            <svg class="icon-sound" viewBox="0 0 24 24" fill="none" stroke-width="2" aria-hidden="true" hidden><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15 9.5a4 4 0 0 1 0 5M18 7a7 7 0 0 1 0 10M20.5 4.5a10.5 10.5 0 0 1 0 15"/></svg>
           </button>
         </div>
       </div>
@@ -711,11 +749,69 @@
 
   <script>
     const translations = {
-      en: { role: "Product Designer, Filmmaker & Founder", product: "Product & Spatial Design:", film: "Film:", back: "Back to all projects" },
-      "zh-Hans": { role: "产品设计师、电影创作者与创始人", product: "产品与空间设计：", film: "影像：", back: "返回所有项目" },
-      "zh-Hant": { role: "產品設計師、電影創作者與創辦人", product: "產品與空間設計：", film: "影像：", back: "返回所有項目" },
-      ja: { role: "プロダクトデザイナー、映像作家、創業者", product: "プロダクト＆空間デザイン：", film: "映像：", back: "すべてのプロジェクトへ戻る" }
+      en: {
+        name: "Tim Li",
+        pageTitle: "Tim Li — Portfolio",
+        role: "Product Designer, Filmmaker & Founder",
+        product: "Product & Spatial Design:",
+        film: "Film:",
+        back: "Back to all projects",
+        selectedWork: "Selected work",
+        light: "Use light appearance",
+        dark: "Use dark appearance",
+        mute: "Mute video",
+        unmute: "Unmute video",
+        selectedProject: "Selected project",
+        detailsComing: "Full project details will be added here."
+      },
+      "zh-Hans": {
+        name: "李倜然",
+        pageTitle: "李倜然 — 作品集",
+        role: "产品设计师、影像创作者与创始人",
+        product: "产品与空间设计：",
+        film: "影像：",
+        back: "返回全部作品",
+        selectedWork: "精选作品",
+        light: "使用明亮模式",
+        dark: "使用夜间模式",
+        mute: "关闭声音",
+        unmute: "打开声音",
+        selectedProject: "精选项目",
+        detailsComing: "完整项目介绍即将更新。"
+      },
+      "zh-Hant": {
+        name: "李倜然",
+        pageTitle: "李倜然 — 作品集",
+        role: "產品設計師、影像創作者與創辦人",
+        product: "產品與空間設計：",
+        film: "影像：",
+        back: "返回全部作品",
+        selectedWork: "精選作品",
+        light: "使用明亮模式",
+        dark: "使用夜間模式",
+        mute: "關閉聲音",
+        unmute: "開啟聲音",
+        selectedProject: "精選項目",
+        detailsComing: "完整項目介紹即將更新。"
+      },
+      ja: {
+        name: "李倜然",
+        pageTitle: "李倜然 — ポートフォリオ",
+        role: "プロダクトデザイナー、映像作家、創業者",
+        product: "プロダクト＆空間デザイン：",
+        film: "映像：",
+        back: "すべての作品に戻る",
+        selectedWork: "主な作品",
+        light: "ライトモードを使用",
+        dark: "ダークモードを使用",
+        mute: "動画をミュート",
+        unmute: "動画の音をオン",
+        selectedProject: "選択したプロジェクト",
+        detailsComing: "詳しいプロジェクト情報は近日公開予定です。"
+      }
     };
+
+    let currentLanguage = "en";
 
     const getPreference = key => {
       try { return localStorage.getItem(key); } catch { return null; }
@@ -806,13 +902,30 @@
 
     const setLanguage = language => {
       const selected = translations[language] ? language : "en";
+      currentLanguage = selected;
+      const copy = translations[selected];
       document.documentElement.lang = selected;
+      document.title = copy.pageTitle;
       document.querySelectorAll("[data-i18n]").forEach(element => {
-        element.textContent = translations[selected][element.dataset.i18n];
+        element.textContent = copy[element.dataset.i18n];
+      });
+      document.querySelectorAll("[data-i18n-aria]").forEach(element => {
+        element.setAttribute("aria-label", copy[element.dataset.i18nAria]);
+      });
+      document.querySelectorAll("[data-project]").forEach(link => {
+        link.textContent = getProjectCopy(link.dataset.project).title;
       });
       document.querySelectorAll("[data-language]").forEach(button => {
         button.setAttribute("aria-pressed", String(button.dataset.language === selected));
       });
+      const lightButton = document.querySelector('[data-theme-choice="light"]');
+      const darkButton = document.querySelector('[data-theme-choice="dark"]');
+      lightButton.setAttribute("aria-label", copy.light);
+      lightButton.title = copy.light;
+      darkButton.setAttribute("aria-label", copy.dark);
+      darkButton.title = copy.dark;
+      if (lastProjectLink && sidebar.classList.contains("showing-project")) renderProjectText(lastProjectLink);
+      syncAudioButton();
       const active = document.querySelector(`[data-language="${selected}"]`);
       placeIndicator(active.closest(".segmented"), active);
       savePreference("portfolio-language", selected);
@@ -859,59 +972,170 @@
     let galleryIndex = 0;
 
     const projectDetails = {
-      "Take Phone for course 599": [
-        "Take Phone is an experimental mobile experience developed for USC’s Course 599. The demo moves from an intimate moment of phone use into fluid, synthetic imagery, exploring how a handheld screen can blur the boundary between physical attention and digital space."
-      ],
-      "Hua Chenyu Mars Concert": [
+      huaChenyu: [
         "Created for Hua Chenyu’s Mars Concert, this series of large-scale inflatable sculptures turns the venue into an otherworldly landscape. The iridescent, organic forms were modeled in CAD and built at architectural scale. Their colors keep changing as daylight fades and the stage lighting takes over. Audiences can walk among the sculptures and interact with them, so the installation becomes part of the concert experience."
       ],
-      "Balenciaga": [
+      balenciaga: [
         "Candy Crush campaign for Balenciaga."
       ],
-      "Burberry": [
+      burberry: [
         "Installation and film for Burberry Year of the Tiger."
       ],
-      "World Projection": [
+      worldProjection: [
         "World Projection explores the profound interconnectedness of space and time, taking inspiration from when I was wandering the Liangzhu Campus by Atelier FCJZ.",
         "Opening titles of the Inter-world-view series of lectures at CAA."
       ],
-      "FN Valve": [
+      fnValve: [
         "Friendly Neighborhood Valve is a heat-triggered valve for residential water lines, designed to protect infrastructure during wildfires.",
         "When a house is beyond saving, the valve automatically cuts it off from the main line, which keeps water pressure up for firefighters and stops debris from flowing back into the system.",
         "It was inspired by the water pressure problems in the Palisades fires."
       ],
-      "Suzhou life for Suzhou museum": [
+      suzhou: [
         "Suzhou Life is a stage design project for a performance at Suzhou Museum.",
         "The project documents concept development, fabrication, spatial installation, and the live performance."
       ],
-      "ARCADE Hotel Handle System": [
-        "A coordinated smart handle system for budget hotels, developed for Project Work 5 at Politecnico di Milano.",
-        "The project combines intuitive ergonomics, NFC access, safety cues, durable materials, and a companion service app across hotel entrances, guest rooms, bathrooms, dining, and laundry spaces."
-      ],
-      "Katalog Studios": [
+      katalog: [
         "Katalog Studios is a creative supercollective spanning visual design, 3D imagery, moving image, spatial storytelling, and experimental technology.",
         "Our work includes projects for Burberry, Balenciaga, POP MART, miHoYo, Riot Games, ZEISS, and BYD Auto across fashion, entertainment, technology, and mobility.",
         "We combine photoreal CG, art direction, campaign imagery, digital environments, installations, virtual characters, and AI-driven content to build complete visual worlds for brands and products."
       ],
-      "Future Forecast for UCCA": [
+      futureForecast: [
         "Pasig River 2030 - 6 Plus\n2022\nDigital Video, color, sound\n8’30”\nCommissioned by UCCA Center for Contemporary Art",
         "The video Pasig River 2030 - 6 Plus, set in the Philippines in 2030, is the story of a fictional local Internet service provider and blockchain company, presenting the future digital life of developing countries from their perspective. The Pasig River of the title is an important thread in the filmic narrative. This river, which flows through Metro Manila, was judged to be “ecologically dead” in 2000 due to pollution. However, within the film’s computer generated imagery, the river has been restored to life and is jointly administered by the local government and the blockchain company. Looming in the background, however, are numerous problems, including comprehensive monitoring and digital colonization.",
         "Informed by in-depth study into current “Digital Earth” projects, network infrastructure construction, and blockchain development, considering filmic narrative through the lens of American sociologist and design theorist Benjamin Bratton’s 6-tier Stack model, investigating the many factors behind the rapid evolution of the cloud-networked society, including the environment and ecology, society and culture, and geopolitics. The “6 Plus” of the title not only echoes the 6-layer structure of the video, but also lightheartedly reminds people of the various generations of mobile phone models. Through a humorous and absurd visual language, the artist reveals contradictions between digital structures and material reality, backwardness and progress. He also forewarns of the changes and “upgrades” that society will face, reminding us of a potential crisis not far away."
       ],
-      "Resonant Universe for West Bund Museum": [
+      resonantUniverse: [
         "The work constructs an Earth-like extraterrestrial world inhabited primarily by jellyfish and other planktonic organisms.",
         "It investigates the environmental conditions necessary for life to develop, while exploring the origins of artificial life.",
         "By incorporating real-world data from the natural sciences into computational simulations, we generate multiple populations of virtual organisms, including jellyfish. Within this simulated ecosystem, the project explores the open-ended possibilities for the evolution of biological form."
-      ]
+      ],
+      digitalBody: []
+    };
+
+    const projectTitles = {
+      en: {
+        huaChenyu: "Hua Chenyu Mars Concert",
+        suzhou: "Suzhou Life for Suzhou Museum",
+        fnValve: "FN Valve",
+        digitalBody: "Digital Body Copyright",
+        futureForecast: "Future Forecast for UCCA",
+        resonantUniverse: "Resonant Universe for West Bund Museum",
+        worldProjection: "World Projection",
+        balenciaga: "Balenciaga",
+        burberry: "Burberry",
+        katalog: "Katalog Studios"
+      },
+      "zh-Hans": {
+        huaChenyu: "华晨宇火星演唱会",
+        suzhou: "苏州博物馆《苏州生活》",
+        fnValve: "FN 防火阀门",
+        digitalBody: "数字身体版权",
+        futureForecast: "UCCA《未来预报》",
+        resonantUniverse: "西岸美术馆《共振宇宙》",
+        worldProjection: "世界投影",
+        balenciaga: "巴黎世家",
+        burberry: "博柏利",
+        katalog: "Katalog 工作室"
+      },
+      "zh-Hant": {
+        huaChenyu: "華晨宇火星演唱會",
+        suzhou: "蘇州博物館《蘇州生活》",
+        fnValve: "FN 防火閥門",
+        digitalBody: "數位身體版權",
+        futureForecast: "UCCA《未來預報》",
+        resonantUniverse: "西岸美術館《共振宇宙》",
+        worldProjection: "世界投影",
+        balenciaga: "巴黎世家",
+        burberry: "博柏利",
+        katalog: "Katalog 工作室"
+      },
+      ja: {
+        huaChenyu: "華晨宇 MARSコンサート",
+        suzhou: "蘇州博物館『蘇州生活』",
+        fnValve: "FN 防火バルブ",
+        digitalBody: "デジタル身体の著作権",
+        futureForecast: "UCCA『未来予報』",
+        resonantUniverse: "西岸美術館『共鳴する宇宙』",
+        worldProjection: "世界投影",
+        balenciaga: "バレンシアガ",
+        burberry: "バーバリー",
+        katalog: "Katalog スタジオ"
+      }
+    };
+
+    const translatedProjectDetails = {
+      "zh-Hans": {
+        huaChenyu: ["这一系列为华晨宇火星演唱会创作的大型气模雕塑，将场地转化为一片异世界景观。造型先在 CAD 中建模，再以建筑尺度制作。虹彩与有机形态会随着日光消退和舞台灯光亮起不断变色；观众可以穿行并与装置互动，使其成为演唱会体验的一部分。"],
+        balenciaga: ["为巴黎世家创作的 Candy Crush 主题宣传项目。"],
+        burberry: ["为博柏利虎年项目创作的装置与影片。"],
+        worldProjection: ["《世界投影》探索空间与时间之间深刻的相互关联，灵感来自我漫步于非常建筑（Atelier FCJZ）设计的良渚校区时的体验。", "中国美术学院“跨世界观”系列讲座片头。"],
+        fnValve: ["FN 防火阀门是一款用于住宅供水管线的热触发阀门，旨在野火期间保护供水基础设施。", "当房屋已无法挽救时，阀门会自动切断其与主管线的连接，以维持消防供水压力并阻止杂物回流。", "项目源于对帕利塞兹山火期间供水压力问题的观察。"],
+        suzhou: ["《苏州生活》是为苏州博物馆演出设计的舞台项目。", "项目记录了概念发展、制作、空间安装与现场演出的全过程。"],
+        katalog: ["Katalog Studios 是一个横跨视觉设计、三维影像、动态影像、空间叙事与实验技术的创意超级协作体。", "合作项目涵盖博柏利、巴黎世家、泡泡玛特、米哈游、拳头游戏、蔡司和比亚迪汽车等品牌。", "我们结合写实 CG、艺术指导、宣传影像、数字环境、装置、虚拟角色与 AI 内容，为品牌和产品构建完整的视觉世界。"],
+        futureForecast: ["《帕西格河 2030—6 Plus》\n2022\n数字影像、彩色、有声\n8分30秒\n由 UCCA 尤伦斯当代艺术中心委任创作", "影片设定在 2030 年的菲律宾，以一家虚构的本地网络服务商与区块链公司为视角，描绘发展中国家的未来数字生活。被污染判定为“生态死亡”的帕西格河在计算机影像中重获生机，却也伴随着全面监控与数字殖民等问题。", "作品以“数字地球”、网络基础设施、区块链和本杰明·布拉顿的六层“堆栈”模型为研究基础，通过幽默而荒诞的视觉语言呈现数字结构与物质现实、落后与进步之间的矛盾，并提示社会不断“升级”背后的潜在危机。"],
+        resonantUniverse: ["作品构建了一个类地的外星世界，其中主要生活着水母及其他浮游生物。", "它研究生命发展所需的环境条件，同时探讨人工生命的起源。", "作品将自然科学的现实数据引入计算模拟，生成包括水母在内的多种虚拟生物群体，并探索生物形态开放演化的可能性。"],
+        digitalBody: []
+      },
+      "zh-Hant": {
+        huaChenyu: ["這一系列為華晨宇火星演唱會創作的大型氣模雕塑，將場地轉化為一片異世界景觀。造型先在 CAD 中建模，再以建築尺度製作。虹彩與有機形態會隨著日光消退和舞台燈光亮起不斷變色；觀眾可以穿行並與裝置互動，使其成為演唱會體驗的一部分。"],
+        balenciaga: ["為巴黎世家創作的 Candy Crush 主題宣傳項目。"],
+        burberry: ["為博柏利虎年項目創作的裝置與影片。"],
+        worldProjection: ["《世界投影》探索空間與時間之間深刻的相互關聯，靈感來自我漫步於非常建築（Atelier FCJZ）設計的良渚校區時的體驗。", "中國美術學院「跨世界觀」系列講座片頭。"],
+        fnValve: ["FN 防火閥門是一款用於住宅供水管線的熱觸發閥門，旨在野火期間保護供水基礎設施。", "當房屋已無法挽救時，閥門會自動切斷其與主管線的連接，以維持消防供水壓力並阻止雜物回流。", "項目源於對帕利塞茲山火期間供水壓力問題的觀察。"],
+        suzhou: ["《蘇州生活》是為蘇州博物館演出設計的舞台項目。", "項目記錄了概念發展、製作、空間安裝與現場演出的全過程。"],
+        katalog: ["Katalog Studios 是一個橫跨視覺設計、三維影像、動態影像、空間敘事與實驗技術的創意超級協作體。", "合作項目涵蓋博柏利、巴黎世家、泡泡瑪特、米哈遊、拳頭遊戲、蔡司和比亞迪汽車等品牌。", "我們結合寫實 CG、藝術指導、宣傳影像、數位環境、裝置、虛擬角色與 AI 內容，為品牌和產品構建完整的視覺世界。"],
+        futureForecast: ["《帕西格河 2030—6 Plus》\n2022\n數位影像、彩色、有聲\n8分30秒\n由 UCCA 尤倫斯當代藝術中心委任創作", "影片設定在 2030 年的菲律賓，以一家虛構的本地網路服務商與區塊鏈公司為視角，描繪發展中國家的未來數位生活。帕西格河在電腦影像中重獲生機，卻也伴隨全面監控與數位殖民等問題。", "作品以數位地球、網路基礎設施、區塊鏈和六層「堆疊」模型為研究基礎，呈現數位結構與物質現實、落後與進步之間的矛盾，並提示持續「升級」背後的潛在危機。"],
+        resonantUniverse: ["作品構建了一個類地的外星世界，其中主要生活著水母及其他浮游生物。", "它研究生命發展所需的環境條件，同時探討人工生命的起源。", "作品將自然科學的現實數據引入計算模擬，生成包括水母在內的多種虛擬生物群體，並探索生物形態開放演化的可能性。"],
+        digitalBody: []
+      },
+      ja: {
+        huaChenyu: ["華晨宇のMARSコンサートのために制作した大型インフレータブル彫刻のシリーズです。CADでモデリングし、建築的なスケールで製作しました。虹色の有機的な形態は、日が暮れて舞台照明へ移るにつれて色を変え、観客がその間を歩き、触れられるコンサート体験の一部となります。"],
+        balenciaga: ["バレンシアガのための Candy Crush キャンペーン。"],
+        burberry: ["バーバリーの寅年プロジェクトのためのインスタレーションと映像。"],
+        worldProjection: ["『世界投影』は空間と時間の深い相互関係を探る作品で、アトリエFCJZが設計した良渚キャンパスを歩いた体験から着想を得ています。", "中国美術学院「Inter-world-view」レクチャーシリーズのオープニングタイトル。"],
+        fnValve: ["FN 防火バルブは、山火事の際に住宅の給水インフラを守るための熱作動式バルブです。", "救済が困難な住宅を本管から自動的に切り離し、消防用の水圧を維持すると同時に、破片の逆流を防ぎます。", "パリセーズ火災で起きた水圧問題から着想を得ました。"],
+        suzhou: ["『蘇州生活』は蘇州博物館での公演のための舞台デザインです。", "コンセプト開発、製作、空間設置、ライブパフォーマンスまでの過程を記録しています。"],
+        katalog: ["Katalog Studios は、ビジュアルデザイン、3DCG、映像、空間的ストーリーテリング、実験技術を横断するクリエイティブ・コレクティブです。", "バーバリー、バレンシアガ、POP MART、miHoYo、Riot Games、ZEISS、BYD Auto などのプロジェクトを手がけています。", "フォトリアルCG、アートディレクション、キャンペーン映像、デジタル環境、インスタレーション、バーチャルキャラクター、AIコンテンツを組み合わせ、ブランドのための完全な視覚世界を構築します。"],
+        futureForecast: ["『Pasig River 2030 - 6 Plus』\n2022\nデジタル映像、カラー、サウンド\n8分30秒\nUCCA現代美術センター委嘱", "2030年のフィリピンを舞台に、架空の通信事業者とブロックチェーン企業の視点から、発展途上国の未来のデジタル生活を描きます。再生したパシッグ川の背後には、全面監視やデジタル植民地主義の問題が潜んでいます。", "デジタル・アース、ネットワーク基盤、ブロックチェーン、六層のスタックモデルの研究を基に、デジタル構造と物質的現実、後進性と進歩の矛盾、そして社会の継続的な「アップグレード」に潜む危機を示します。"],
+        resonantUniverse: ["水母やプランクトンを主な生物とする、地球に似た異星世界を構築した作品です。", "生命が発達するための環境条件を検討しながら、人工生命の起源を探ります。", "自然科学の実データを計算シミュレーションへ取り込み、水母を含む複数の仮想生物群を生成し、生物形態の開かれた進化の可能性を探求します。"],
+        digitalBody: []
+      }
+    };
+
+    const getProjectCopy = projectKey => {
+      const languageTitles = projectTitles[currentLanguage] || projectTitles.en;
+      const translatedDetails = translatedProjectDetails[currentLanguage]?.[projectKey];
+      return {
+        title: languageTitles[projectKey] || projectTitles.en[projectKey] || projectKey,
+        details: translatedDetails ?? projectDetails[projectKey] ?? []
+      };
+    };
+
+    const renderProjectText = link => {
+      const copy = getProjectCopy(link.dataset.project);
+      const details = copy.details.length
+        ? copy.details
+        : [translations[currentLanguage].selectedProject, translations[currentLanguage].detailsComing];
+      projectTitle.textContent = copy.title;
+      projectParagraphs.forEach((paragraph, index) => {
+        paragraph.textContent = details[index] || "";
+        paragraph.hidden = !details[index];
+      });
+      if (activeGallery.length) {
+        activeGalleryTitle = copy.title;
+        previewImage.alt = `${copy.title} — ${galleryIndex + 1} / ${activeGallery.length}`;
+      }
+      return copy;
     };
 
     const syncAudioButton = () => {
       const soundOn = !previewVideo.muted;
+      const copy = translations[currentLanguage];
       audioToggle.setAttribute("aria-pressed", String(soundOn));
-      audioToggle.setAttribute("aria-label", soundOn ? "Mute video" : "Unmute video");
-      audioToggle.title = soundOn ? "Mute" : "Unmute";
-      audioToggle.querySelector(".icon-muted").hidden = soundOn;
-      audioToggle.querySelector(".icon-sound").hidden = !soundOn;
+      audioToggle.setAttribute("aria-label", soundOn ? copy.mute : copy.unmute);
+      audioToggle.title = soundOn ? copy.mute : copy.unmute;
+      audioToggle.querySelector(".icon-muted").toggleAttribute("hidden", soundOn);
+      audioToggle.querySelector(".icon-sound").toggleAttribute("hidden", !soundOn);
     };
 
     audioToggle.addEventListener("click", () => {
@@ -942,91 +1166,119 @@
     galleryPrev.addEventListener("click", () => showGalleryImage(galleryIndex - 1));
     galleryNext.addEventListener("click", () => showGalleryImage(galleryIndex + 1));
 
-    document.querySelectorAll(".work a").forEach(link => {
-      link.addEventListener("click", event => {
-        event.preventDefault();
-        const gallerySources = link.dataset.gallery?.split("|").filter(Boolean) || [];
-        const imageSource = link.dataset.image || gallerySources[0];
-        const embedSource = link.dataset.youtube;
-        const source = link.dataset.video || "assets/landing-page.mp4";
-        previewVideo.classList.toggle("fit-contain", link.dataset.videoFit === "contain");
-        const title = link.textContent.trim();
-        const category = link.closest(".group").dataset.category;
-        const details = projectDetails[title] || [
-          `Selected work in ${category}.`,
-          "Full project details will be added here."
-        ];
+    const wait = duration => new Promise(resolve => setTimeout(resolve, duration));
+    const nextPaint = () => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+    const waitForMedia = (element, eventName, timeout = 900) => new Promise(resolve => {
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
+        element.removeEventListener(eventName, finish);
+        clearTimeout(timer);
+        resolve();
+      };
+      const timer = setTimeout(finish, timeout);
+      element.addEventListener(eventName, finish, { once: true });
+    });
+    let projectTransitionId = 0;
 
+    const prepareProjectMedia = async link => {
+      const gallerySources = link.dataset.gallery?.split("|").filter(Boolean) || [];
+      const imageSource = link.dataset.image || gallerySources[0];
+      const embedSource = link.dataset.youtube;
+      const source = link.dataset.video || "assets/landing-page.mp4";
+      const projectCopy = getProjectCopy(link.dataset.project);
+      previewVideo.classList.toggle("fit-contain", link.dataset.videoFit === "contain");
+
+      if (embedSource) {
+        activeGallery = [];
+        galleryControls.hidden = true;
+        previewVideo.pause();
+        previewVideo.hidden = true;
+        previewImage.hidden = true;
+        previewImage.removeAttribute("src");
+        previewImage.alt = "";
+        previewEmbed.hidden = false;
+        previewEmbed.src = embedSource;
+        audioToggle.disabled = true;
+        await waitForMedia(previewEmbed, "load");
+      } else if (imageSource) {
+        previewEmbed.hidden = true;
+        previewEmbed.removeAttribute("src");
+        activeGallery = gallerySources.length ? gallerySources : [imageSource];
+        activeGalleryTitle = projectCopy.title;
+        galleryIndex = 0;
+        previewVideo.pause();
+        previewVideo.hidden = true;
+        previewImage.hidden = false;
+        showGalleryImage(0, false);
+        galleryControls.hidden = activeGallery.length < 2;
+        audioToggle.disabled = true;
+        if (previewImage.decode) await previewImage.decode().catch(() => {});
+      } else {
+        previewEmbed.hidden = true;
+        previewEmbed.removeAttribute("src");
+        activeGallery = [];
+        galleryControls.hidden = true;
+        previewImage.hidden = true;
+        previewImage.removeAttribute("src");
+        previewImage.alt = "";
+        previewVideo.hidden = false;
+        audioToggle.disabled = false;
+        if (previewVideo.getAttribute("src") !== source) {
+          previewVideo.src = source;
+          previewVideo.load();
+          await waitForMedia(previewVideo, "loadeddata", 1200);
+        } else {
+          previewVideo.currentTime = 0;
+        }
+        previewVideo.play().catch(() => {});
+        syncAudioButton();
+      }
+    };
+
+    document.querySelectorAll(".work a").forEach(link => {
+      link.addEventListener("click", async event => {
+        event.preventDefault();
+        const transitionId = ++projectTransitionId;
         document.querySelectorAll(".work a").forEach(item => item.removeAttribute("aria-current"));
         link.setAttribute("aria-current", "true");
         lastProjectLink = link;
+        preview.classList.remove("is-project-enter");
+        preview.classList.add("is-blurring");
 
-        projectTitle.textContent = title;
-        projectParagraphs.forEach((paragraph, index) => {
-          paragraph.textContent = details[index] || "";
-          paragraph.hidden = !details[index];
-        });
+        await wait(reduceMotion.matches ? 0 : 420);
+        if (transitionId !== projectTransitionId) return;
+
+        renderProjectText(link);
         sidebar.classList.add("showing-project");
         leftColumn.classList.add("is-shifted");
         menuView.inert = true;
         menuView.setAttribute("aria-hidden", "true");
         projectDetail.setAttribute("aria-hidden", "false");
+        preview.classList.add("is-active", "is-project-enter");
 
-        preview.classList.remove("is-active");
-        void preview.offsetWidth;
-        preview.classList.add("is-active");
-
-        if (embedSource) {
-          activeGallery = [];
-          galleryControls.hidden = true;
-          previewVideo.pause();
-          previewVideo.hidden = true;
-          previewImage.hidden = true;
-          previewImage.removeAttribute("src");
-          previewImage.alt = "";
-          previewEmbed.src = embedSource;
-          previewEmbed.hidden = false;
-          audioToggle.disabled = true;
-        } else if (imageSource) {
-          previewEmbed.hidden = true;
-          previewEmbed.removeAttribute("src");
-          activeGallery = gallerySources.length ? gallerySources : [imageSource];
-          activeGalleryTitle = title;
-          galleryIndex = 0;
-          previewVideo.pause();
-          previewVideo.hidden = true;
-          previewImage.hidden = false;
-          showGalleryImage(0, false);
-          galleryControls.hidden = activeGallery.length < 2;
-          audioToggle.disabled = true;
-        } else {
-          previewEmbed.hidden = true;
-          previewEmbed.removeAttribute("src");
-          activeGallery = [];
-          galleryControls.hidden = true;
-          previewImage.hidden = true;
-          previewImage.removeAttribute("src");
-          previewImage.alt = "";
-          previewVideo.hidden = false;
-          audioToggle.disabled = false;
-          if (previewVideo.getAttribute("src") !== source) {
-            previewVideo.src = source;
-            previewVideo.load();
-          } else {
-            previewVideo.currentTime = 0;
-          }
-          previewVideo.play().catch(() => {});
-        }
+        await prepareProjectMedia(link);
+        if (transitionId !== projectTransitionId) return;
+        await nextPaint();
+        preview.classList.remove("is-blurring", "is-project-enter");
       });
     });
 
-    backButton.addEventListener("click", () => {
+    backButton.addEventListener("click", async () => {
+      const transitionId = ++projectTransitionId;
+      preview.classList.remove("is-project-enter");
+      preview.classList.add("is-blurring");
+
+      await wait(reduceMotion.matches ? 0 : 420);
+      if (transitionId !== projectTransitionId) return;
+
+      preview.classList.add("is-project-enter");
       sidebar.classList.remove("showing-project");
       leftColumn.classList.remove("is-shifted");
       menuView.inert = false;
       menuView.removeAttribute("aria-hidden");
       projectDetail.setAttribute("aria-hidden", "true");
-      preview.classList.remove("is-active");
       document.querySelectorAll(".work a").forEach(item => item.removeAttribute("aria-current"));
       previewImage.hidden = true;
       previewImage.classList.remove("is-changing");
@@ -1040,9 +1292,19 @@
       previewVideo.hidden = false;
       previewVideo.classList.remove("fit-contain");
       audioToggle.disabled = false;
-      previewVideo.src = "assets/landing-page.mp4";
-      previewVideo.load();
+      if (previewVideo.getAttribute("src") !== "assets/landing-page.mp4") {
+        previewVideo.src = "assets/landing-page.mp4";
+        previewVideo.load();
+        await waitForMedia(previewVideo, "loadeddata", 1200);
+      } else {
+        previewVideo.currentTime = 0;
+      }
       previewVideo.play().catch(() => {});
+      syncAudioButton();
+
+      if (transitionId !== projectTransitionId) return;
+      await nextPaint();
+      preview.classList.remove("is-active", "is-blurring", "is-project-enter");
       lastProjectLink?.focus();
     });
 
