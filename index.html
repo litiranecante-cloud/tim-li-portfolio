@@ -231,6 +231,40 @@
 
     .project-copy p:first-of-type { white-space: pre-line; }
 
+    .awards-content {
+      display: grid;
+      gap: 26px;
+    }
+
+    .awards-content[hidden] { display: none; }
+
+    .awards-section {
+      display: grid;
+      gap: 12px;
+    }
+
+    .awards-section h3 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .awards-section ul {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding-left: 1.1rem;
+    }
+
+    .awards-section li {
+      padding-left: 0.12rem;
+      color: var(--muted);
+      font-size: 0.78rem;
+      line-height: 1.52;
+    }
+
     h1,
     h2,
     p { margin: 0; }
@@ -675,7 +709,7 @@
             </section>
 
             <section class="group" data-category="Awards &amp; Exhibitions" aria-labelledby="awards-heading">
-              <h2 id="awards-heading" data-i18n="awards">Awards &amp; Exhibitions</h2>
+              <h2 id="awards-heading"><a class="group-title-link" href="#" data-project="awards" data-i18n="awards">Awards &amp; Exhibitions</a></h2>
             </section>
           </nav>
 
@@ -693,6 +727,16 @@
             <p class="project-paragraph"></p>
             <p class="project-paragraph"></p>
             <p class="project-paragraph"></p>
+            <div class="awards-content" hidden>
+              <section class="awards-section">
+                <h3 class="awards-list-title"></h3>
+                <ul class="awards-list"></ul>
+              </section>
+              <section class="awards-section">
+                <h3 class="exhibitions-list-title"></h3>
+                <ul class="exhibitions-list"></ul>
+              </section>
+            </div>
           </div>
         </article>
       </aside>
@@ -974,6 +1018,11 @@
     const projectDetail = document.querySelector(".project-detail");
     const projectTitle = document.querySelector(".project-title");
     const projectParagraphs = [...document.querySelectorAll(".project-paragraph")];
+    const awardsContent = document.querySelector(".awards-content");
+    const awardsListTitle = document.querySelector(".awards-list-title");
+    const exhibitionsListTitle = document.querySelector(".exhibitions-list-title");
+    const awardsList = document.querySelector(".awards-list");
+    const exhibitionsList = document.querySelector(".exhibitions-list");
     const backButton = document.querySelector(".back-button");
     let lastProjectLink;
     let activeGallery = [];
@@ -1021,6 +1070,54 @@
       digitalBody: []
     };
 
+    const awardsAndExhibitions = {
+      awards: [
+        "Friendly Neighborhood, TIE Hub – USC Viterbi School of Engineering, 2nd Place, 2026",
+        "World Projection, 14th National Art Exhibition, Zhejiang Province Bronze Award, selected for Beijing Exhibition, 2024",
+        "Pasig River 2030 - 6 Plus, The 28th ifva Festival, Finalist, 2023",
+        "Pasig River 2030 - 6 Plus, HiShorts! International Short Film Festival, Experimental Shortlisted, 2022",
+        "Jellyfish Cosmos, The 4th Hong Kong University Student Contemporary Design Award, Bronze Medal, 2022",
+        "Jellyfish Cosmos, CADA Japan Concept Art Design Competition, Third Prize, 2022",
+        "Code_Orpheus, The Eighth Academic Award, National Design and Art Competition, 1st Prize of Design Category, 2022",
+        "Code_Orpheus, Hong Kong Digital Art Design Competition, Second Prize, 2022",
+        "Code_Orpheus, 2022 Global Chinese Art Design Award, Excellent Award in Student Group, 2022",
+        "Code_Orpheus, 2022 G-CROSS Creative Award, Bronze National Finals, 2022",
+        "CADA Japan Concept Art Design Competition, Advanced Award, 2022",
+        "Code_Orpheus, Asian Young Rookie Award (Autumn Competition), Excellent Award, 2022",
+        "Suzhou Color: 24 Solar Times, The 13th Art and Design Exhibition of Chinese Universities, Excellent Project, 2022",
+        "Suzhou Color: 24 Solar Times, GundlBerg Design Award, Bronze Medal, 2022",
+        "Prototype & Morphtype: Public Convergence, The Seventh Bauhaus Award International Design Competition, Bauhaus Award (Top Prize), 2022",
+        "Prototype & Morphtype: Public Convergence, 2021 British Ecology Design Award, Bronze Medal, 2022",
+        "Prototype & Morphtype: Public Convergence, China Creative Design Yearbook 2020-2021, Annual Gold Award, 2021",
+        "Suzhou Color: 24 Solar Times, Britain International Creative Competition, 2021",
+        "Super M'art'ket in Innovative and Design College, 2021 Golden Block International Design Award, Finalist Award, 2021",
+        "National English Competition for College Students, National Second Prize (Top grade in CAA), 2021"
+      ],
+      exhibitions: [
+        "World Projection, 14th National Art Exhibition, China Art Museum (Shanghai) and National Art Museum of China (Beijing), September – October 2024",
+        "VMO Digital Body Copyright, Neo Shibuya, Shibuya Square, Tokyo, June 2024",
+        "Pasig River 2030 - 6 Plus, Wu Ziyang: Cloud-Native Nomad, How Art Museum, Shanghai, July – August 2023",
+        "Digital Afterlife Agency, Sonar Music Festival, Barcelona, Spain, June 2023",
+        "Pasig River 2030 - 6 Plus, Brain Garden, Opening Session of the 5th Zhijiang International Youth Art Week (CAA Graduation Exhibition), Hangzhou, June 2023",
+        "Pasig River 2030 - 6 Plus, Fictions of Interdomain Routing, Long March Space, Beijing, April – July 2023",
+        "Pasig River 2030 - 6 Plus, The 28th ifva Media Art Category Finalist Showcase, Pao Galleries, Hong Kong Arts Centre, March 2023",
+        "Pasig River 2030 - 6 Plus, Resonance Between Text, Code and Perception, Central Academy of Fine Art, Beijing, February – March 2023",
+        "Pasig River 2030 - 6 Plus, The Pieces I Am, UCCA Edge, Shanghai, September 2022 – January 2023",
+        "Jellyfish Cosmos, Infinite Game: I. Impossible Improvisation, West Bund Museum, Shanghai, November 2022",
+        "Jellyfish Cosmos, Asia Digital Art Exhibition 2022, Times Art Museum, Beijing, September – November 2022",
+        "Jellyfish Cosmos, Visual Force, Opening Session of the 4th Zhijiang International Youth Art Week (CAA Graduation Exhibition), Hangzhou, June 2022",
+        "Jellyfish Cosmos, The First Zhejiang Young Scientists Festival 2022, Yungu Campus, Westlake University, Hangzhou, May 2022",
+        "Prototype & Morphtype: Public Convergence, The 4th Asia-Pacific Visual Arts Communication Exhibition, December 2021 – January 2022"
+      ]
+    };
+
+    const awardsLabels = {
+      en: { awards: "AWARDS & HONORS", exhibitions: "EXHIBITIONS" },
+      "zh-Hans": { awards: "奖项与荣誉", exhibitions: "展览" },
+      "zh-Hant": { awards: "獎項與榮譽", exhibitions: "展覽" },
+      ja: { awards: "受賞歴・栄誉", exhibitions: "展覧会" }
+    };
+
     const projectTitles = {
       en: {
         huaChenyu: "Hua Chenyu Mars Concert",
@@ -1032,7 +1129,8 @@
         worldProjection: "World Projection",
         balenciaga: "Balenciaga",
         burberry: "Burberry",
-        katalog: "Katalog Studios"
+        katalog: "Katalog Studios",
+        awards: "Awards & Exhibitions"
       },
       "zh-Hans": {
         huaChenyu: "华晨宇火星演唱会",
@@ -1044,7 +1142,8 @@
         worldProjection: "世界投影",
         balenciaga: "巴黎世家",
         burberry: "博柏利",
-        katalog: "Katalog 工作室"
+        katalog: "Katalog 工作室",
+        awards: "奖项与展览"
       },
       "zh-Hant": {
         huaChenyu: "華晨宇火星演唱會",
@@ -1056,7 +1155,8 @@
         worldProjection: "世界投影",
         balenciaga: "巴黎世家",
         burberry: "博柏利",
-        katalog: "Katalog 工作室"
+        katalog: "Katalog 工作室",
+        awards: "獎項與展覽"
       },
       ja: {
         huaChenyu: "華晨宇 MARSコンサート",
@@ -1068,7 +1168,8 @@
         worldProjection: "世界投影",
         balenciaga: "バレンシアガ",
         burberry: "バーバリー",
-        katalog: "Katalog スタジオ"
+        katalog: "Katalog スタジオ",
+        awards: "受賞歴・展覧会"
       }
     };
 
@@ -1122,14 +1223,31 @@
 
     const renderProjectText = link => {
       const copy = getProjectCopy(link.dataset.project);
+      const isAwards = link.dataset.project === "awards";
       const details = copy.details.length
         ? copy.details
         : [translations[currentLanguage].selectedProject, translations[currentLanguage].detailsComing];
       projectTitle.textContent = copy.title;
+      awardsContent.hidden = !isAwards;
       projectParagraphs.forEach((paragraph, index) => {
-        paragraph.textContent = details[index] || "";
-        paragraph.hidden = !details[index];
+        paragraph.textContent = isAwards ? "" : details[index] || "";
+        paragraph.hidden = isAwards || !details[index];
       });
+      if (isAwards) {
+        const labels = awardsLabels[currentLanguage] || awardsLabels.en;
+        awardsListTitle.textContent = labels.awards;
+        exhibitionsListTitle.textContent = labels.exhibitions;
+        awardsList.replaceChildren(...awardsAndExhibitions.awards.map(item => {
+          const entry = document.createElement("li");
+          entry.textContent = item;
+          return entry;
+        }));
+        exhibitionsList.replaceChildren(...awardsAndExhibitions.exhibitions.map(item => {
+          const entry = document.createElement("li");
+          entry.textContent = item;
+          return entry;
+        }));
+      }
       if (activeGallery.length) {
         activeGalleryTitle = copy.title;
         previewImage.alt = `${copy.title} — ${galleryIndex + 1} / ${activeGallery.length}`;
